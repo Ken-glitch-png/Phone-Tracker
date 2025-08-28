@@ -3,20 +3,14 @@
   "name": "phone-tracking-website",
   "builds": [
     {
-      "src": "public/**/*",
-      "use": "@vercel/static"
+      "src": "server.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
       "src": "/(.*)",
-      "dest": "/public/index.html"
+      "dest": "/server.js"
     }
   ],
   "headers": [
