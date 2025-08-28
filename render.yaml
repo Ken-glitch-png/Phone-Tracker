@@ -3,6 +3,7 @@ services:
     name: phone-tracker
     env: node
     plan: free
+    rootDir: .          # ← This fixes the path issue
     buildCommand: npm install
     startCommand: npm start
     envVars:
