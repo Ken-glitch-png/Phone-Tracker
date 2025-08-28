@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Mobile Device Recovery Service - Phone Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Phone Tracker</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                    <li><a href="#track" class="nav-link">Track Phone</a></li>
+                    <li><a href="#found" class="nav-link">Report Found</a></li>
+                    <li id="loginMenuItem"><a href="#login" class="nav-link">Login</a></li>
+                    <li id="registerMenuItem"><a href="#register" class="nav-link">Register</a></li>
+                    <li id="userWelcome" class="user-welcome hidden">
+                        <span id="welcomeText">Welcome, User</span>
+                    </li>
+                    <li id="logoutMenuItem" class="hidden">
+                        <a href="#" class="nav-link" onclick="handleLogout()">Logout</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Professional Mobile Device Recovery Service</h1>
+                <p>Our comprehensive tracking system assists in locating and recovering lost mobile devices through advanced search capabilities utilizing phone numbers, IMEI identifiers, and email addresses.</p>
+                <div class="hero-actions">
+                    <!-- Search Section -->
+                    <div class="action-section">
+                        <h3><i class="fas fa-search"></i> Search for Lost Device</h3>
+                        <div class="search-form-inline">
+                            <input type="text" id="heroSearchQuery" class="search-input" placeholder="Enter phone number, IMEI, or email...">
+                            <select id="heroSearchCountry">
+                                <option value="Philippines" selected>Philippines</option>
+                                <option value="United States">United States</option>
+                                <option value="Canada">Canada</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <button class="btn btn-primary search-button" onclick="performHeroSearch()">Search</button>
+                            <div class="location-controls">
+                                <button type="button" class="btn btn-secondary location-btn" id="heroLocationBtn" onclick="showLocationPaymentPrompt('hero')">
+                                    <i class="fas fa-map-marker-alt"></i> Find Using Location
+                                    <span class="premium-badge">Premium</span>
+                                </button>
+                                <div id="heroLocationStatus" class="location-status hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Report Lost Section -->
+                    <div class="action-section">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Report Lost Device</h3>
+                        <div class="report-form-inline">
+                            <input type="tel" id="heroLostPhone" placeholder="Phone number">
+                            <input type="text" id="heroLostImei" placeholder="IMEI (optional)">
+                            <input type="email" id="heroLostEmail" placeholder="Your email" required>
+                            <button class="btn btn-secondary" onclick="performHeroReport()">Report Lost</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <h3 id="totalLost">0</h3>
+                    <p>Devices Reported Lost</p>
+                </div>
+                <div class="stat">
+                    <h3 id="totalFound">0</h3>
+                    <p>Devices Located</p>
+                </div>
+                <div class="stat">
+                    <h3 id="totalReturned">0</h3>
+                    <p>Successfully Reunited</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="section hidden">
+            <div class="container">
+                <h2><i class="fas fa-info-circle"></i> How Our Service Works</h2>
+                <div class="how-it-works-content">
+                    <div class="step-row">
+                        <div class="step">
+                            <div class="step-number">01</div>
+                            <div class="step-icon">📱</div>
+                            <h3>Report Your Lost Device</h3>
+                            <p>Submit comprehensive details about your lost mobile device, including phone number, IMEI identifier, device specifications, and location where it was last seen. Our secure database stores this information for matching purposes.</p>
+                            <div class="step-highlight">Quick & Easy Registration</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">02</div>
+                            <div class="step-icon">🔍</div>
+                            <h3>Advanced Search Algorithm</h3>
+                            <p>Our sophisticated matching system cross-references your device information with found devices reported by Good Samaritans and partner organizations across our network.</p>
+                            <div class="step-highlight">Powered by AI Technology</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">03</div>
+                            <div class="step-icon">💳</div>
+                            <h3>Secure Payment Verification</h3>
+                            <p>To access detailed search results and contact information, users must complete a secure payment verification process. This premium service ensures serious inquiries and helps maintain our platform.</p>
+                            <div class="step-highlight">Budget-Friendly Pricing</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">04</div>
+                            <div class="step-icon">🤝</div>
+                            <h3>Facilitated Reunion</h3>
+                            <p>Upon successful payment verification, we provide contact details and facilitate the secure reunion between device owners and finders, ensuring a safe and verified exchange process.</p>
+                            <div class="step-highlight">Safe & Verified Exchange</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pricing-info">
+                    <h3>Service Pricing</h3>
+                    <p>Search and contact access: <strong>$2.99</strong> per search query</p>
+                    <p>Premium membership (unlimited searches): <strong>$9.99</strong> per month</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Login Section -->
+        <section id="login" class="section hidden">
+            <div class="container">
+                <div class="auth-container">
+                    <h2><i class="fas fa-sign-in-alt"></i> User Login</h2>
+                    <form id="loginForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="loginUsername">Username or Email</label>
+                            <input type="text" id="loginUsername" name="username" placeholder="Enter username or email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large">Sign In</button>
+                        <div class="auth-links">
+                            <p>Don't have an account? <a href="#" onclick="showSection('register')">Register here</a></p>
+                            <p><a href="#" onclick="showForgotPassword()">Forgot your password?</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registration Section -->
+        <section id="register" class="section hidden">
+            <div class="container">
+                <div class="auth-container">
+                    <h2><i class="fas fa-user-plus"></i> Create Account</h2>
+                    <form id="registerForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="registerUsername">Username</label>
+                            <input type="text" id="registerUsername" name="username" placeholder="Choose a username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email Address</label>
+                            <input type="email" id="registerEmail" name="email" placeholder="your.email@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" name="password" placeholder="Create a secure password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPhone">Phone Number</label>
+                            <input type="tel" id="registerPhone" name="phone" placeholder="+1234567890" required>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                            <label for="agreeTerms">I agree to the <a href="#" onclick="showTerms()">Terms of Service</a> and <a href="#" onclick="showPrivacy()">Privacy Policy</a></label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large">Create Account</button>
+                        <div class="auth-links">
+                            <p>Already have an account? <a href="#" onclick="showSection('login')">Sign in here</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Section -->
+        <section id="payment" class="section hidden">
+            <div class="container">
+                <div class="payment-container">
+                    <h2><i class="fas fa-credit-card"></i> Payment Verification</h2>
+                    <div class="payment-info">
+                        <h3>Access Premium Search Results</h3>
+                        <p>To view detailed search results and contact information, please complete the payment verification process.</p>
+                        <div class="pricing-options">
+                            <div class="pricing-option">
+                                <h4>Single Search</h4>
+                                <div class="price">$2.99</div>
+                                <p>Access to one search result with full contact details</p>
+                                <button class="btn btn-primary" onclick="selectPaymentOption('single')">Select</button>
+                            </div>
+                            <div class="pricing-option featured">
+                                <h4>Premium Monthly</h4>
+                                <div class="price">$9.99</div>
+                                <p>Unlimited searches for 30 days</p>
+                                <button class="btn btn-primary" onclick="selectPaymentOption('monthly')">Select</button>
+                            </div>
+                        </div>
+                    </div>
+                    <form id="paymentForm" class="payment-form hidden">
+                        <h3>Payment Information</h3>
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiryDate">Expiry Date</label>
+                                <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" name="cvv" placeholder="123" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardName">Cardholder Name</label>
+                            <input type="text" id="cardName" name="cardName" placeholder="Full name on card" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="billingAddress">Billing Address</label>
+                            <input type="text" id="billingAddress" name="billingAddress" placeholder="Street address" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="billingCity">City</label>
+                                <input type="text" id="billingCity" name="billingCity" placeholder="City" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="billingZip">ZIP Code</label>
+                                <input type="text" id="billingZip" name="billingZip" placeholder="12345" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large">Complete Payment</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Section -->
+        <section id="search" class="section hidden">
+            <div class="container">
+                <h2><i class="fas fa-search"></i> Search for Lost Mobile Devices</h2>
+                <div class="search-container">
+                    <div class="search-form">
+                        <input type="text" id="searchQuery" class="search-input" placeholder="Enter phone number, IMEI identifier, or email address...">
+                        <select id="searchType">
+                            <option value="all">All Fields</option>
+                            <option value="phone">Phone Number</option>
+                            <option value="imei">IMEI</option>
+                            <option value="email">Email</option>
+                        </select>
+                        <select id="searchCountry" name="searchCountry">
+                            <option value="">All Countries</option>
+                            <option value="Philippines" selected>Philippines</option>
+                            <optgroup label="Asia-Pacific">
+                                <option value="Australia">Australia</option>
+                                <option value="Bangladesh">Bangladesh</option>
+                                <option value="Brunei">Brunei</option>
+                                <option value="Cambodia">Cambodia</option>
+                                <option value="China">China</option>
+                                <option value="Hong Kong">Hong Kong</option>
+                                <option value="India">India</option>
+                                <option value="Indonesia">Indonesia</option>
+                                <option value="Japan">Japan</option>
+                                <option value="Laos">Laos</option>
+                                <option value="Macau">Macau</option>
+                                <option value="Malaysia">Malaysia</option>
+                                <option value="Myanmar">Myanmar</option>
+                                <option value="New Zealand">New Zealand</option>
+                                <option value="Pakistan">Pakistan</option>
+                                <option value="Singapore">Singapore</option>
+                                <option value="South Korea">South Korea</option>
+                                <option value="Sri Lanka">Sri Lanka</option>
+                                <option value="Taiwan">Taiwan</option>
+                                <option value="Thailand">Thailand</option>
+                                <option value="Vietnam">Vietnam</option>
+                            </optgroup>
+                            <optgroup label="North America">
+                                <option value="Canada">Canada</option>
+                                <option value="Mexico">Mexico</option>
+                                <option value="United States">United States</option>
+                            </optgroup>
+                            <optgroup label="Europe">
+                                <option value="Austria">Austria</option>
+                                <option value="Belgium">Belgium</option>
+                                <option value="Denmark">Denmark</option>
+                                <option value="Finland">Finland</option>
+                                <option value="France">France</option>
+                                <option value="Germany">Germany</option>
+                                <option value="Ireland">Ireland</option>
+                                <option value="Italy">Italy</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="Norway">Norway</option>
+                                <option value="Spain">Spain</option>
+                                <option value="Sweden">Sweden</option>
+                                <option value="Switzerland">Switzerland</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                            </optgroup>
+                            <optgroup label="Middle East & Africa">
+                                <option value="Egypt">Egypt</option>
+                                <option value="Israel">Israel</option>
+                                <option value="Kenya">Kenya</option>
+                                <option value="Nigeria">Nigeria</option>
+                                <option value="Saudi Arabia">Saudi Arabia</option>
+                                <option value="South Africa">South Africa</option>
+                                <option value="UAE">United Arab Emirates</option>
+                            </optgroup>
+                            <optgroup label="South America">
+                                <option value="Argentina">Argentina</option>
+                                <option value="Brazil">Brazil</option>
+                                <option value="Chile">Chile</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Peru">Peru</option>
+                            </optgroup>
+                            <option value="Other">Other</option>
+                        </select>
+                        <select id="searchRegion">
+                            <option value="">All Regions</option>
+                            <!-- Philippine Regions -->
+                            <option value="Metro Manila">Metro Manila (NCR)</option>
+                            <option value="Ilocos Region">Ilocos Region (Region I)</option>
+                            <option value="Cagayan Valley">Cagayan Valley (Region II)</option>
+                            <option value="Central Luzon">Central Luzon (Region III)</option>
+                            <option value="Calabarzon">Calabarzon (Region IV-A)</option>
+                            <option value="Mimaropa">Mimaropa (Region IV-B)</option>
+                            <option value="Bicol Region">Bicol Region (Region V)</option>
+                            <option value="Western Visayas">Western Visayas (Region VI)</option>
+                            <option value="Central Visayas">Central Visayas (Region VII)</option>
+                            <option value="Eastern Visayas">Eastern Visayas (Region VIII)</option>
+                            <option value="Zamboanga Peninsula">Zamboanga Peninsula (Region IX)</option>
+                            <option value="Northern Mindanao">Northern Mindanao (Region X)</option>
+                            <option value="Davao Region">Davao Region (Region XI)</option>
+                            <option value="Soccsksargen">Soccsksargen (Region XII)</option>
+                            <option value="Caraga">Caraga (Region XIII)</option>
+                            <option value="Bangsamoro">Bangsamoro (BARMM)</option>
+                            <option value="Cordillera">Cordillera (CAR)</option>
+                        </select>
+                        <input type="text" id="searchCity" class="search-input" placeholder="City/Municipality (optional)">
+                        <div class="search-controls-row">
+                            <button class="btn btn-primary search-button" id="searchButton">Search</button>
+                            <button type="button" class="btn btn-secondary location-btn" id="searchLocationBtn" onclick="showLocationPaymentPrompt('search')">
+                                <i class="fas fa-map-marker-alt"></i> Find Using Location
+                                <span class="premium-badge">Premium</span>
+                            </button>
+                        </div>
+                        <div class="location-info">
+                            <div id="searchLocationStatus" class="location-status hidden"></div>
+                            <div class="proximity-search hidden" id="proximitySearch">
+                                <label for="searchRadius">Search within:</label>
+                                <select id="searchRadius">
+                                    <option value="5">5 km</option>
+                                    <option value="10" selected>10 km</option>
+                                    <option value="25">25 km</option>
+                                    <option value="50">50 km</option>
+                                    <option value="100">100 km</option>
+                                </select>
+                                <span class="proximity-label">of your location</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="searchResults" class="results-container search-results"></div>
+            </div>
+        </section>
+
+        <!-- Track Phone Section -->
+        <section id="track" class="section hidden">
+            <div class="container">
+                <h2><i class="fas fa-map-marked-alt"></i> Track Your Lost Phone</h2>
+                <div class="track-container">
+                    <div class="track-form">
+                        <div class="track-intro">
+                            <p>Enter your phone details to track its exact location. This feature helps you find your lost device using GPS coordinates.</p>
+                            <div class="security-notice">
+                                <i class="fas fa-shield-alt"></i>
+                                <strong>Security Notice:</strong> You can only track phones registered with your email address. Email verification is required for all tracking requests to protect device privacy.
+                            </div>
+                        </div>
+                        <form id="trackPhoneForm">
+                            <div class="form-group">
+                                <label for="trackIdentifier">Phone Number, IMEI, or Email</label>
+                                <input type="text" id="trackIdentifier" name="identifier" required placeholder="Enter phone number, IMEI, or email address">
+                            </div>
+                            <div class="form-group">
+                                <label for="trackType">Search Type</label>
+                                <select id="trackType" name="type">
+                                    <option value="phone">Phone Number</option>
+                                    <option value="imei">IMEI</option>
+                                    <option value="email">Email Address</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ownerEmail">Owner Email (for verification)</label>
+                                <input type="email" id="ownerEmail" name="owner_email" required placeholder="Enter the email used when reporting the phone">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-large">
+                                <i class="fas fa-search-location"></i> Track Phone Location
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div id="trackResults" class="track-results hidden">
+                        <div class="track-header">
+                            <h3><i class="fas fa-mobile-alt"></i> Phone Location Found</h3>
+                        </div>
+                        <div id="trackDetails" class="track-details"></div>
+                        <div id="trackMap" class="track-map">
+                            <div id="mapContainer" class="map-container"></div>
+                        </div>
+                        <div class="track-actions">
+                            <button class="btn btn-secondary" onclick="copyLocationToClipboard()">
+                                <i class="fas fa-copy"></i> Copy Coordinates
+                            </button>
+                            <button class="btn btn-primary" onclick="openInMaps()">
+                                <i class="fas fa-external-link-alt"></i> Open in Maps
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Report Lost Phone Section -->
+        <section id="report" class="section hidden">
+            <div class="container">
+                <h2><i class="fas fa-exclamation-triangle"></i> Report Lost Mobile Device</h2>
+                <form id="lostPhoneForm" class="phone-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="lostPhone">Mobile Phone Number</label>
+                            <input type="tel" id="lostPhone" name="phone_number" placeholder="+1234567890">
+                        </div>
+                        <div class="form-group">
+                            <label for="lostImei">IMEI Identifier</label>
+                            <input type="text" id="lostImei" name="imei" placeholder="123456789012345">
+                        </div>
+                        <div class="form-group">
+                            <label for="lostEmail">Email Address *</label>
+                            <input type="email" id="lostEmail" name="email" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="lostBrand">Device Brand</label>
+                            <input type="text" id="lostBrand" name="brand" placeholder="Apple, Samsung, Google, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="lostModel">Device Model</label>
+                            <input type="text" id="lostModel" name="model" placeholder="iPhone 15, Galaxy S24, Pixel 8, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="lostColor">Device Color</label>
+                            <input type="text" id="lostColor" name="color" placeholder="Space Black, Titanium White, Ocean Blue, etc.">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="lostDescription">Additional Information</label>
+                            <textarea id="lostDescription" name="description" rows="3" placeholder="Please provide any additional details that may assist in identifying your mobile device..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="lostCountry">Country *</label>
+                            <select id="lostCountry" name="country" required>
+                                <option value="Philippines" selected>Philippines</option>
+                                <optgroup label="Asia-Pacific">
+                                    <option value="Australia">Australia</option>
+                                    <option value="Bangladesh">Bangladesh</option>
+                                    <option value="Brunei">Brunei</option>
+                                    <option value="Cambodia">Cambodia</option>
+                                    <option value="China">China</option>
+                                    <option value="Hong Kong">Hong Kong</option>
+                                    <option value="India">India</option>
+                                    <option value="Indonesia">Indonesia</option>
+                                    <option value="Japan">Japan</option>
+                                    <option value="Laos">Laos</option>
+                                    <option value="Macau">Macau</option>
+                                    <option value="Malaysia">Malaysia</option>
+                                    <option value="Myanmar">Myanmar</option>
+                                    <option value="New Zealand">New Zealand</option>
+                                    <option value="Pakistan">Pakistan</option>
+                                    <option value="Singapore">Singapore</option>
+                                    <option value="South Korea">South Korea</option>
+                                    <option value="Sri Lanka">Sri Lanka</option>
+                                    <option value="Taiwan">Taiwan</option>
+                                    <option value="Thailand">Thailand</option>
+                                    <option value="Vietnam">Vietnam</option>
+                                </optgroup>
+                                <optgroup label="North America">
+                                    <option value="Canada">Canada</option>
+                                    <option value="Mexico">Mexico</option>
+                                    <option value="United States">United States</option>
+                                </optgroup>
+                                <optgroup label="Europe">
+                                    <option value="Austria">Austria</option>
+                                    <option value="Belgium">Belgium</option>
+                                    <option value="Denmark">Denmark</option>
+                                    <option value="Finland">Finland</option>
+                                    <option value="France">France</option>
+                                    <option value="Germany">Germany</option>
+                                    <option value="Ireland">Ireland</option>
+                                    <option value="Italy">Italy</option>
+                                    <option value="Netherlands">Netherlands</option>
+                                    <option value="Norway">Norway</option>
+                                    <option value="Spain">Spain</option>
+                                    <option value="Sweden">Sweden</option>
+                                    <option value="Switzerland">Switzerland</option>
+                                    <option value="United Kingdom">United Kingdom</option>
+                                </optgroup>
+                                <optgroup label="Middle East & Africa">
+                                    <option value="Egypt">Egypt</option>
+                                    <option value="Israel">Israel</option>
+                                    <option value="Kenya">Kenya</option>
+                                    <option value="Nigeria">Nigeria</option>
+                                    <option value="Saudi Arabia">Saudi Arabia</option>
+                                    <option value="South Africa">South Africa</option>
+                                    <option value="UAE">United Arab Emirates</option>
+                                </optgroup>
+                                <optgroup label="South America">
+                                    <option value="Argentina">Argentina</option>
+                                    <option value="Brazil">Brazil</option>
+                                    <option value="Chile">Chile</option>
+                                    <option value="Colombia">Colombia</option>
+                                    <option value="Peru">Peru</option>
+                                </optgroup>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lostRegion">Region/Province/State</label>
+                            <select id="lostRegion" name="region_state">
+                                <option value="">Select Region</option>
+                                <!-- Philippine Regions -->
+                                <option value="Metro Manila">Metro Manila (NCR)</option>
+                                <option value="Ilocos Region">Ilocos Region (Region I)</option>
+                                <option value="Cagayan Valley">Cagayan Valley (Region II)</option>
+                                <option value="Central Luzon">Central Luzon (Region III)</option>
+                                <option value="Calabarzon">Calabarzon (Region IV-A)</option>
+                                <option value="Mimaropa">Mimaropa (Region IV-B)</option>
+                                <option value="Bicol Region">Bicol Region (Region V)</option>
+                                <option value="Western Visayas">Western Visayas (Region VI)</option>
+                                <option value="Central Visayas">Central Visayas (Region VII)</option>
+                                <option value="Eastern Visayas">Eastern Visayas (Region VIII)</option>
+                                <option value="Zamboanga Peninsula">Zamboanga Peninsula (Region IX)</option>
+                                <option value="Northern Mindanao">Northern Mindanao (Region X)</option>
+                                <option value="Davao Region">Davao Region (Region XI)</option>
+                                <option value="Soccsksargen">Soccsksargen (Region XII)</option>
+                                <option value="Caraga">Caraga (Region XIII)</option>
+                                <option value="Bangsamoro">Bangsamoro (BARMM)</option>
+                                <option value="Cordillera">Cordillera (CAR)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lostCity">City/Municipality</label>
+                            <input type="text" id="lostCity" name="city" placeholder="Enter city or municipality">
+                        </div>
+                        <div class="form-group">
+                            <label for="lostLocation">Specific Location (Optional)</label>
+                            <input type="text" id="lostLocation" name="location_lost" placeholder="Street, building, landmark, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="lostDate">Date of Loss</label>
+                            <input type="date" id="lostDate" name="date_lost">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactName">Your Name *</label>
+                            <input type="text" id="contactName" name="contact_name" required placeholder="Your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPhone">Contact Phone</label>
+                            <input type="tel" id="contactPhone" name="contact_phone" placeholder="Alternative contact number">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-large">Submit Lost Device Report</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Report Found Phone Section -->
+        <section id="found" class="section hidden">
+            <div class="container">
+                <h2><i class="fas fa-check-circle"></i> Report Found Mobile Device</h2>
+                <form id="foundPhoneForm" class="phone-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="foundPhone">Phone Number (if accessible)</label>
+                            <input type="tel" id="foundPhone" name="phone_number" placeholder="+1234567890">
+                        </div>
+                        <div class="form-group">
+                            <label for="foundImei">IMEI Identifier (if accessible)</label>
+                            <input type="text" id="foundImei" name="imei" placeholder="123456789012345">
+                        </div>
+                        <div class="form-group">
+                            <label for="foundEmail">Email Address (if visible)</label>
+                            <input type="email" id="foundEmail" name="email" placeholder="owner@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="foundBrand">Device Brand</label>
+                            <input type="text" id="foundBrand" name="brand" placeholder="Apple, Samsung, Google, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="foundModel">Device Model</label>
+                            <input type="text" id="foundModel" name="model" placeholder="iPhone 15, Galaxy S24, Pixel 8, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="foundColor">Device Color</label>
+                            <input type="text" id="foundColor" name="color" placeholder="Space Black, Titanium White, Ocean Blue, etc.">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="foundDescription">Additional Information</label>
+                            <textarea id="foundDescription" name="description" rows="3" placeholder="Please provide any additional details about the device or circumstances of discovery..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="foundCountry">Country *</label>
+                            <select id="foundCountry" name="country" required>
+                                <option value="Philippines" selected>Philippines</option>
+                                <optgroup label="Asia-Pacific">
+                                    <option value="Australia">Australia</option>
+                                    <option value="Bangladesh">Bangladesh</option>
+                                    <option value="Brunei">Brunei</option>
+                                    <option value="Cambodia">Cambodia</option>
+                                    <option value="China">China</option>
+                                    <option value="Hong Kong">Hong Kong</option>
+                                    <option value="India">India</option>
+                                    <option value="Indonesia">Indonesia</option>
+                                    <option value="Japan">Japan</option>
+                                    <option value="Laos">Laos</option>
+                                    <option value="Macau">Macau</option>
+                                    <option value="Malaysia">Malaysia</option>
+                                    <option value="Myanmar">Myanmar</option>
+                                    <option value="New Zealand">New Zealand</option>
+                                    <option value="Pakistan">Pakistan</option>
+                                    <option value="Singapore">Singapore</option>
+                                    <option value="South Korea">South Korea</option>
+                                    <option value="Sri Lanka">Sri Lanka</option>
+                                    <option value="Taiwan">Taiwan</option>
+                                    <option value="Thailand">Thailand</option>
+                                    <option value="Vietnam">Vietnam</option>
+                                </optgroup>
+                                <optgroup label="North America">
+                                    <option value="Canada">Canada</option>
+                                    <option value="Mexico">Mexico</option>
+                                    <option value="United States">United States</option>
+                                </optgroup>
+                                <optgroup label="Europe">
+                                    <option value="Austria">Austria</option>
+                                    <option value="Belgium">Belgium</option>
+                                    <option value="Denmark">Denmark</option>
+                                    <option value="Finland">Finland</option>
+                                    <option value="France">France</option>
+                                    <option value="Germany">Germany</option>
+                                    <option value="Ireland">Ireland</option>
+                                    <option value="Italy">Italy</option>
+                                    <option value="Netherlands">Netherlands</option>
+                                    <option value="Norway">Norway</option>
+                                    <option value="Spain">Spain</option>
+                                    <option value="Sweden">Sweden</option>
+                                    <option value="Switzerland">Switzerland</option>
+                                    <option value="United Kingdom">United Kingdom</option>
+                                </optgroup>
+                                <optgroup label="Middle East & Africa">
+                                    <option value="Egypt">Egypt</option>
+                                    <option value="Israel">Israel</option>
+                                    <option value="Kenya">Kenya</option>
+                                    <option value="Nigeria">Nigeria</option>
+                                    <option value="Saudi Arabia">Saudi Arabia</option>
+                                    <option value="South Africa">South Africa</option>
+                                    <option value="UAE">United Arab Emirates</option>
+                                </optgroup>
+                                <optgroup label="South America">
+                                    <option value="Argentina">Argentina</option>
+                                    <option value="Brazil">Brazil</option>
+                                    <option value="Chile">Chile</option>
+                                    <option value="Colombia">Colombia</option>
+                                    <option value="Peru">Peru</option>
+                                </optgroup>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="foundRegion">Region/Province/State</label>
+                            <select id="foundRegion" name="region_state">
+                                <option value="">Select Region</option>
+                                <!-- Philippine Regions -->
+                                <option value="Metro Manila">Metro Manila (NCR)</option>
+                                <option value="Ilocos Region">Ilocos Region (Region I)</option>
+                                <option value="Cagayan Valley">Cagayan Valley (Region II)</option>
+                                <option value="Central Luzon">Central Luzon (Region III)</option>
+                                <option value="Calabarzon">Calabarzon (Region IV-A)</option>
+                                <option value="Mimaropa">Mimaropa (Region IV-B)</option>
+                                <option value="Bicol Region">Bicol Region (Region V)</option>
+                                <option value="Western Visayas">Western Visayas (Region VI)</option>
+                                <option value="Central Visayas">Central Visayas (Region VII)</option>
+                                <option value="Eastern Visayas">Eastern Visayas (Region VIII)</option>
+                                <option value="Zamboanga Peninsula">Zamboanga Peninsula (Region IX)</option>
+                                <option value="Northern Mindanao">Northern Mindanao (Region X)</option>
+                                <option value="Davao Region">Davao Region (Region XI)</option>
+                                <option value="Soccsksargen">Soccsksargen (Region XII)</option>
+                                <option value="Caraga">Caraga (Region XIII)</option>
+                                <option value="Bangsamoro">Bangsamoro (BARMM)</option>
+                                <option value="Cordillera">Cordillera (CAR)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="foundCity">City/Municipality</label>
+                            <input type="text" id="foundCity" name="city" placeholder="Enter city or municipality">
+                        </div>
+                        <div class="form-group">
+                            <label for="foundLocation">Specific Location (Optional)</label>
+                            <input type="text" id="foundLocation" name="location_found" placeholder="Street, building, landmark, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="foundDate">Date of Discovery</label>
+                            <input type="date" id="foundDate" name="date_found">
+                        </div>
+                        <div class="form-group">
+                            <label for="finderName">Your Name *</label>
+                            <input type="text" id="finderName" name="finder_name" required placeholder="Your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="finderContact">Your Contact *</label>
+                            <input type="tel" id="finderContact" name="finder_contact" required placeholder="Your phone number or email">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-large">Submit Found Device Report</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Mobile Device Recovery Service. All rights reserved.</p>
+            <p>Professional service dedicated to reuniting individuals with their lost mobile devices.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="messageContainer" class="message-container hidden">
+        <div id="messageContent" class="message"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="script.js"></script>
+</body>
+</html>
