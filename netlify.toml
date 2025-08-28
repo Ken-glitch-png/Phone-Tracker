@@ -1,0 +1,67 @@
+[build]
+  # Directory to change to before starting a build
+  base = "."
+  
+  # Directory that contains the deploy-ready HTML files and assets
+  publish = "public"
+  
+  # Default build command
+  command = "echo 'No build step required for static site'"
+
+# Redirect rules for single-page application
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;"
+
+# Cache static assets
+[[headers]]
+  for = "/styles.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/script.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Environment variables (example)
+[context.production.environment]
+  NODE_ENV = "production"
+  API_BASE_URL = "https://your-api-domain.com"
+
+[context.deploy-preview.environment]
+  NODE_ENV = "development"
+  API_BASE_URL = "https://staging-api-domain.com"
+
+# Form handling (if you add contact forms later)
+# [build.processing]
+#   skip_processing = false
+# [build.processing.css]
+#   bundle = true
+#   minify = true
+# [build.processing.js]
+#   bundle = true
+#   minify = true
+# [build.processing.html]
+#   pretty_urls = true
+
+# Plugin configuration (optional)
+# [[plugins]]
+#   package = "netlify-plugin-lighthouse"
+
+# Edge functions (advanced, optional)
+# [[edge_functions]]
+#   function = "geolocation"
+#   path = "/api/location/*"

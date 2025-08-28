@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: phone-tracker
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        generateValue: true
+      - key: JWT_SECRET
+        generateValue: true
+    healthCheckPath: /
