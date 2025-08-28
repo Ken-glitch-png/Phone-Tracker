@@ -48,11 +48,6 @@
       "NODE_ENV": "production"
     }
   },
-  "functions": {
-    "public/**/*": {
-      "maxDuration": 10
-    }
-  },
   "regions": ["iad1"],
   "public": true
 }
