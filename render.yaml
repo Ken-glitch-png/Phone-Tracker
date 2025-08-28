@@ -3,8 +3,10 @@ services:
     name: phone-tracker
     env: node
     plan: free
+    rootDir: .
     buildCommand: npm install
     startCommand: npm start
+    publishPath: ./public
     envVars:
       - key: NODE_ENV
         value: production
