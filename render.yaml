@@ -3,9 +3,11 @@ services:
     name: phone-tracker
     env: node
     plan: free
-    rootDir: .          # ← This fixes the path issue
+    repo: https://github.com/yourusername/phone-tracker.git
+    branch: main
     buildCommand: npm install
     startCommand: npm start
+    publishPath: .
     envVars:
       - key: NODE_ENV
         value: production
@@ -14,3 +16,4 @@ services:
       - key: JWT_SECRET
         generateValue: true
     healthCheckPath: /
+    autoDeploy: true
