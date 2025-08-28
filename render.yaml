@@ -3,7 +3,7 @@ services:
     name: phone-tracker
     env: node
     plan: free
-    repo: https://github.com/yourusername/phone-tracker.git
+    repo: https://github.com/Ken-glitch-png/phone-tracker.git
     branch: main
     buildCommand: npm install
     startCommand: npm start
